@@ -1,0 +1,94 @@
+.book-cover {
+  width: 100%;
+}
+
+hr {
+  border-top: 1px solid #000;
+}
+
+.ic-trash {
+  height: 21px;
+  float: right;
+}
+
+.ic-trash:hover {
+  cursor: pointer;
+}
+
+.book-item {
+  position: relative;
+}
+
+p {
+  font-size: 0.95em;
+}
+
+.card p {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.card-first-section p {
+  margin-bottom: 0px;
+}
+
+.main-container .col-4 hr {
+  margin-top: 8px;
+}
+
+p.authorInfo span {
+  color: red;
+}
+
+.book-title:hover {
+  color: red;
+}
+
+.book-title:hover, .book-cover:hover {
+  cursor: pointer;
+}
+
+a h4 {
+  color: black;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Loading Screen */
+
+html, body {
+  height: 100%;
+}
+
+#rotated-image {
+  -webkit-animation:spin 4s linear infinite;
+  -moz-animation:spin 4s linear infinite;
+  animation:spin 4s linear infinite;
+}
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+#loader-wrapper {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background-color: grey;
+  opacity: 0.9;
+  z-index: 1001;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+}
+
+#loader-wrapper .content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* End Loading Screen */

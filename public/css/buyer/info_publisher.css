@@ -1,0 +1,96 @@
+h4 {
+  font-weight: bold;
+}
+
+.publisher-brand-image {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  height: 80px;
+}
+
+.col-10 {
+  position: relative;
+}
+
+button {
+  font-size: 14px;
+}
+
+hr {
+  border-top: 1px solid #5E5E5E;
+}
+
+p {
+  font-size: 14px;
+}
+
+.button {
+  background-color: red; 
+  border: none;
+  color: white;
+  padding: 2px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+.card-book {
+  padding: 15px 15px;
+  margin: 10px 0px 10px 0px;
+  border : 1px solid #707070;
+  border-radius: 10px;
+}
+
+.card-book:hover {
+  cursor: pointer;
+}
+
+.ebook-image {
+  height: 200px;
+}
+
+.author-text {
+  color: red;
+}
+
+p.author-info {
+  margin-bottom: 5px;
+}
+
+p.synopsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  -webkit-box-orient: vertical;
+  margin-bottom: 5px;
+}
+
+.star-image {
+  height: 20px;
+}
+
+.book-rating-container p.text {
+  padding-top : 20px;
+}
+
+p.price {
+  margin-top: 8px;
+  font-size: 15pt;
+  margin-bottom: 0px;
+}
+
+.book-rating-container {
+  padding-left: 15px;
+}
+
+.book-rating-container p {
+  margin-top: 4.5px;
+}
+
+#publisher-join-info {
+	margin-bottom: 3px;
+}

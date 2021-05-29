@@ -1,0 +1,87 @@
+.card-book {
+  border: 1px solid black;
+  margin-bottom: 15px;
+  margin-left: 0px;
+  margin-right: 0px;
+  border-radius: 5px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.card-book img {
+  max-height: 330px;
+}
+
+.ebook-image {
+  width: 100%;
+}
+
+p.synopsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  margin-bottom: 8px;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+
+p.author-info {
+  margin-bottom: 8px;
+}
+
+p.author-info span:last-child {
+  color: red;
+}
+
+p.price {
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+.book-rating-container p {
+  margin-left: 10px;
+  margin-bottom: 0px;
+  margin-top: 0px !important;
+}
+
+.star-image {
+  height: 20px;
+}
+
+.ic-trash {
+  height: 22px;
+  margin-right: 5px;
+}
+
+.ic-trash:hover {
+  cursor: pointer;
+}
+
+.btn-buy {
+  background-color: red; /* Green */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 3px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.book-title:hover {
+  cursor: pointer;
+  color: red;
+}
+
+.ebook-image:hover {
+  cursor: pointer;
+}
+
+a h4 {
+  color: black;
+}
+
+a:hover {
+  text-decoration: none;
+}

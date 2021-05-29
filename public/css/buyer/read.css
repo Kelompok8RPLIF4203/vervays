@@ -1,0 +1,72 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: rgb(148, 155, 156);
+}
+
+.top-bar {
+  color: #fff;
+  padding: 1rem;
+}
+
+.btn {
+  background: coral;
+  color: #fff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0.7rem 2rem;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.page-info {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.error {
+  background: orangered;
+  color: #fff;
+  padding: 1rem;
+}
+
+.canvas-container {
+  position: relative;
+}
+
+canvas {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  height: 90vh;
+}
+
+.canvas-container {
+  height: 90vh;
+  width: 100%;
+}
+
+.controller {
+  height: 10vh;
+  width: 100%;
+  background-color: rgb(148, 155, 156);
+  border-bottom: 1px solid rgb(148, 155, 156);
+  position: relative;
+}
+
+.controller-contain {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.page-info {
+  color: #ffffff;
+}

@@ -1,0 +1,160 @@
+.ebook-cover {
+  width: 100%;
+}
+
+h2, h4, h5 {
+  font-weight: bold;
+}
+
+h5 {
+  margin-top: 30px;
+  font-size: 1.5em;
+}
+
+p.author-info {
+  margin-bottom: 0px;
+}
+
+p.author-info span {
+  color: red;
+}
+
+.rating-row {
+  padding-left: 15px;
+  margin-bottom: 3px;
+}
+
+.star-image {
+  height: 20px;
+  margin: 5px 3px 5px 3px;
+}
+
+.star-image:first-child {
+  margin-left: 0px;
+}
+
+p.rating, p.rating-count {
+  margin-bottom: 0px;
+}
+
+hr {
+  border-top: 1px solid black;
+}
+
+.detail-section div:first-child {
+  padding-left: 15px;
+}
+
+.detail-section div p {
+  margin: 3px 0px;
+}
+
+#publisherText span {
+  color: red;
+}
+
+#publisherText span:hover {
+  cursor: pointer;
+}
+
+.rating-section .row {
+  margin-left: 10px;
+}
+
+.rating-section h1.rating {
+  font-size: 4em;
+}
+
+.rating-section .rating-row {
+  padding-left: 0px;
+  margin: 0px;
+}
+
+.rating-section .rating-row .star-image {
+  height: 25px;
+}
+
+.rating-row-progress p {
+  margin-bottom: 5px;
+  margin-top: 0px;
+  font-size: 0.8em;
+}
+
+.custom-progress {
+  width: 200px;
+  background-color: #e9ecef;
+  height: 13px;
+  border-radius: 4px;
+}
+
+.custom-progress .loaded {
+  width: 0%;
+  background-color: #FFF822;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.review-section .card-custom {
+  border: 0.5px solid black;
+  margin: 20px 5px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.review-section .card-custom .rating-row {
+  padding-left: 10px;
+  margin-bottom: 3px;
+}
+
+.review-section .card-custom {
+  padding-left: 10px;
+}
+
+p.reviewer {
+  margin-bottom: 0px;
+}
+
+p.review {
+  margin-bottom: 3px;
+}
+
+.review-date-row {
+  width: 100%;
+}
+
+p.review-date {
+  margin-right: 5px;
+  margin-bottom: 5px;
+  text-align: right;
+}
+
+.button {
+  background-color: red;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  padding: 3px 15px;  
+}
+
+.button-aside {
+  background-color: red;
+  width: 90%;
+  font-size: 0.85em;
+  border: none;
+  margin-bottom: 10px;
+  color: white;
+  padding: 3px 15px;  
+}
+
+#textSynopsis {
+  font-weight: 400;
+  font-size: 1em;
+  color: #212529;
+}
+
+@media only screen and (max-width: 768px) {
+  .ebook-cover {
+    max-height: 330px;
+    width: auto;
+  }
+}

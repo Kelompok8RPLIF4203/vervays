@@ -1,0 +1,23 @@
+textarea {
+  width: 100% !important;
+}
+
+p.author-info {
+	margin-bottom: 2px;
+}
+
+.star-image {
+	height: 20px;
+}
+
+.star-image:hover {
+	cursor: pointer;
+}
+
+.heading-rating {
+	margin-bottom: 0px;
+}
+
+p.author-info span {
+	color: red;
+}

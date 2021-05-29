@@ -1,0 +1,94 @@
+.main-info {
+	border: 1px solid black;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+p.order-status {
+	margin: 0px;
+}
+
+.order-status-container {
+	background: yellow;
+	border: 1px solid yellow;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+section.first-section p {
+	margin: 0px;
+}
+
+section.first-section .second-col {
+	position: relative;
+}
+
+section.first-section button {
+	position: absolute;
+	top: 50%;
+	right: 15px;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.button {
+  background-color: red;
+  border: none;
+  color: white;
+  padding: 5px 8px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.85em;
+}
+
+hr {
+	border-top: 1px solid black;
+	margin: 0px;
+}
+
+.book-item-container .row {
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+.book-item-container p {
+	margin: 2px;
+}
+
+.book-item-container img {
+	height: 180px;
+}
+
+.book-item-container hr {
+	margin-left: 15px;
+	margin-right: 15px;
+	margin-top: 10px;
+}
+
+p.price {
+	font-size: 1.1em;
+}
+
+p.title {
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+p.title:hover, img.book-cover:hover {
+	cursor: pointer;
+}
+
+p.author-info span {
+	color: red;
+}
+
+.book-item-container img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+p.total-price {
+	font-size: 1.1em;
+	padding-right: 15px;
+}

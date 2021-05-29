@@ -1,0 +1,66 @@
+a.navbar-brand img {
+  height: 40px;
+}
+
+.navbar-collapse img.icon, .responsive-navbar img.icon {
+  height: 25px;
+  width: 25px;
+}
+
+.badge {
+  border: 1px solid black;
+  border-radius: 10px;
+  height: 20px;
+  padding: 0px 5px 0px 0px;
+}
+
+.badge p {
+  font-size: 15px;
+}
+
+.badge:hover .dropdown-content {
+  display: block;
+}
+
+ul li.dropdown a {
+  color: black !important;
+}
+
+.separator {
+  width: 1px;
+  color: black;
+  height: 40px;
+  border : 1px solid #8E8E8E;
+}
+
+.linkMenjadiPublisher:hover {
+  cursor: pointer;
+}
+
+#firstResponsiveNavbarSection {
+  background-color: #F9F9F9;
+  padding: 8px;
+}
+
+#nav-toggler {
+  width: 30px;
+  margin-top: 8px;
+}
+
+.responsive-navbar img.icon {
+  margin-top: 8px;
+}
+
+#nav-toggler:hover {
+  cursor: pointer;
+}
+
+#collapsedSection {
+  background-color: #f9f9f9;
+  padding: 5px;
+}
+
+#collapsedSection a {
+  text-decoration: none;
+  color: black;
+}

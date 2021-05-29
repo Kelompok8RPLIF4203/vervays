@@ -1,0 +1,23 @@
+#first-section p {
+  margin-bottom: 3px;
+}
+
+.book-cover {
+	width: 100%;
+}
+
+p.author-info span {
+	color: red;
+}
+
+p.author-info {
+	margin-bottom: 3px;
+}
+
+hr {
+	border-top: 1px solid #000;
+}
+
+.book-item:hover {
+	cursor: pointer;
+}
