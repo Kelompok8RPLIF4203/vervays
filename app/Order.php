@@ -277,8 +277,7 @@ class Order extends Model
     // @param $bookId : id buku (integer);
     public static function whetherTheTransactionIsPendingOrSuccess($bookId)
     {
-        $userId = session('id');
-        if (Order::whetherTheBuyerHasAlreadyPurchasedBook($userId, $bookId)) {
+        if (Order::whetherTheBuyerHasAlreadyPurchasedBook(session('id'), $bookId)) {
             return "success";
         }
         return "pending";
