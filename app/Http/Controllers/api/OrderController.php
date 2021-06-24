@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Order;
+use App\PaymentGateway;
 
 class OrderController extends Controller
 {
@@ -33,6 +34,6 @@ class OrderController extends Controller
 
     public function getPaymentCodeFromMidtrans(Request $request)
     {
-        return Order::getPaymentCodeFromMidtrans($request->get('orderId'), $request->get('paymentMethod'));
+        return PaymentGateway::getPaymentCodeFromMidtrans($request->get('orderId'), $request->get('paymentMethod'));
     }
 }
