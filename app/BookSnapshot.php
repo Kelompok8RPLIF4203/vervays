@@ -7,6 +7,9 @@ use Carbon\Carbon;
 
 class BookSnapshot
 {
+    // Method ini digunakan untuk mengembalikan harga buku
+    // @param $bookId  : id buku
+    // @param $orderId : id order
     public static function getPrice($bookId, $orderId)
     {
         return DB::table('book_snapshots')
@@ -15,6 +18,8 @@ class BookSnapshot
                     ->pluck('price')[0];
     }
 
+    // Method ini digunakan untuk mengembalikan total harga dari sebuah order
+    // @param $orderId : id order
     public static function getTotalOrderPrice($orderId)
     {
         return DB::table('book_snapshots')
@@ -23,11 +28,16 @@ class BookSnapshot
                     ->get()[0]->totalPrice;
     }
 
+    // Method ini digunakan untuk mengembalikan id-id buku dari sebuah order
+    // @param $orderId : id order
     public static function getArrBookIdByOrderId($orderId)
     {
         return DB::table('book_snapshots')->where('orderId', $orderId)->pluck('bookId');
     }
 
+    // Method ini digunakan untuk menyimpan BookSnapshot baru
+    // $arrBookId : id-id buku yang akan disimpan
+    // $orderId   : id order
     public static function storeBookSnaphshotsByArrBookIdAndOrderId($arrBookId, $orderId)
     {
         foreach ($arrBookId as $book) {
@@ -42,6 +52,8 @@ class BookSnapshot
         }
     }
 
+    // Method ini digunakan untuk mengembalikan nilai berupa berapa banyak sebuah buku berhasil terjual
+    // @param $id : id BookSnaphot
     public static function getBookSoldCount($id)
     {
         $soldCount = DB::table('book_snapshots')
