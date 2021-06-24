@@ -12,6 +12,8 @@ use Faker\Factory as Faker;
 
 class Order extends Model
 {
+    // PG artinya Payment Gateway
+    
     // Method ini digunakan untuk mengembalikan status user dalam halaman ebook_info
     // @param $bookId : id buku
     // @return : status user (seperti enum)
@@ -348,40 +350,46 @@ class Order extends Model
         }
     }
 
+    // Method ini digunakan untuk meng-update status transaksi publisher.
+    // Jika ada transaksi yang statusnya masih "pending" namun buyer sudah membayar, maka status transaksi tersebut diubah menjadi "success"
     public static function updateStatusForPublisher()
     {
-        $publisherId = Publisher::getPublisherIdWithUserId(session('id'));
-        $orders = DB::table('orders')
-                        ->join('book_snapshots', 'orders.id', '=', 'book_snapshots.orderId')
-                        ->join('books', 'book_snapshots.bookId', '=', 'books.id')
-                        ->join('publishers', 'books.publisherId', '=', 'publishers.id')
-                        ->where('publishers.id', $publisherId)
-                        ->where('status', 'pending')
-                        ->select(DB::raw('`orders`.`id` as id'))
-                        ->addSelect(DB::raw('`orders`.`backIdCode` as backIdCode'))
-                        ->addSelect(DB::raw('`orders`.`userId` as userOwnerId'))
-                        ->get();
+        $publisherId = Publisher::getPublisherIdWithUserId(session('id')); // mengambil id publisher
+
+        // Variabel $orders menyimpan data order yang berkaitan dengan publisher
+        $orders = DB::table('orders') // dari tabel orders
+                        ->join('book_snapshots', 'orders.id', '=', 'book_snapshots.orderId') // join dengan tabel book_snapshots
+                        ->join('books', 'book_snapshots.bookId', '=', 'books.id') // join dengan tabel books
+                        ->join('publishers', 'books.publisherId', '=', 'publishers.id') // join dengan tabel publishers
+                        ->where('publishers.id', $publisherId) // filter dengan id publishers
+                        ->where('status', 'pending') // filter yang statusnya masih pending
+                        ->select(DB::raw('`orders`.`id` as id')) // memilih orders.id dengan alias id
+                        ->addSelect(DB::raw('`orders`.`backIdCode` as backIdCode')) // memilih orders.backIdCode dengan alias backIdCode
+                        ->addSelect(DB::raw('`orders`.`userId` as userOwnerId')) // memilih orders.userId dengan alias userOwnerId
+                        ->get(); // mendapatkan hasil query
         foreach ($orders as $order) {
-            $midtransOrderId = $order->id."-".$order->backIdCode;
-            $transactionStatus = Order::getTransactionStatusFromMidtrans($midtransOrderId);
-            if($transactionStatus == "settlement") {
-                DB::table('orders')->where('id', $order->id)->update([
+            $midtransOrderId = $order->id."-".$order->backIdCode; // Menyimpan orderId yang ada di PG
+            $transactionStatus = Order::getTransactionStatusFromMidtrans($midtransOrderId); // mengambil status transaksi
+            if($transactionStatus == "settlement") { // jika transaksinya selesai
+                DB::table('orders')->where('id', $order->id)->update([ // update status transaksi yang ada di database menjadi "success"
                     "status" => "success",
                     "updated_at" => Carbon::now(),
                 ]);
+
+                // Variabel $arrBookId menyipan id-id buku yang dibeli pada order
                 $arrBookId = DB::table('orders')
                                         ->join('book_snapshots', 'orders.id', '=', 'book_snapshots.orderId')
                                         ->where('orders.id', $order->id)
                                         ->pluck('book_snapshots.bookId');
                 foreach ($arrBookId as $bookId) {
-                    $publisherId = Book::getPublisherIdByBookId($bookId);
-                    $price = BookSnapshot::getPrice($bookId, $order->id);
-                    Publisher::addBalance($publisherId, $price);
-                    Have::store($order->userOwnerId, $bookId);
+                    $publisherId = Book::getPublisherIdByBookId($bookId); // mendapatkan id publisher
+                    $price = BookSnapshot::getPrice($bookId, $order->id); // mendapatkan harga buku
+                    Publisher::addBalance($publisherId, $price); // menambah saldo publisher
+                    Have::store($order->userOwnerId, $bookId); // menyimpan buku dalam koleksi user
                 }
             }
-            else if($transactionStatus == "cancel" || $transactionStatus == "expire") {
-                DB::table('orders')->where('id', $order->id)->update([
+            else if($transactionStatus == "cancel" || $transactionStatus == "expire") { // jika transaksinya gagal
+                DB::table('orders')->where('id', $order->id)->update([ // update status transaksi yang ada di database menjadi "failed"
                     "status" => "failed",
                     "updated_at" => Carbon::now(),
                 ]);
@@ -389,55 +397,68 @@ class Order extends Model
         }
     }
 
+    // Method ini digunakan untuk mengembalikan data order user
+    // @param $userId : id user
     public static function getUserOrders($userId)
     {
         $orders = DB::table('orders')
                         ->select('id', 'created_at', 'status')
                         ->where('userId', $userId)
                         ->orderBy('created_at', 'desc')
-                        ->get(); // berupa array of object
+                        ->get(); // mendapatkan data order
         foreach ($orders as $order) {
-            $order->created_at = Carbon::parse($order->created_at)->toDateString();
-            $order->totalPrice = Order::getTotalPrice($order->id);
+            $order->created_at = Carbon::parse($order->created_at)->toDateString(); // mengubah field created_at menjadi string
+            $order->totalPrice = Order::getTotalPrice($order->id); // mendapatkan total harga order
         }
         return $orders;
     }
 
+    // method ini digunakan untuk mengembalikan total harga dari sebuah order
+    // @param $orderId : id dari order yang akan dikembalikan total harganya
     public static function getTotalPrice($orderId)
     {
         return BookSnapshot::getTotalOrderPrice($orderId);
     }
 
+    // method ini digunakan untuk mengembalikan id - id buku dari sebuah order
+    // @param $orderId : id dari order yang akan dikembalikan id - id bukunya
     public static function getBooksByOrderId($orderId)
     {
         $arrBookId = BookSnapshot::getArrBookIdByOrderId($orderId);
         return Book::getBooksByArrBookId($arrBookId);
     }
 
+    // method ini digunakan untuk mengambil data sebuah order dari database
+    // @param $orderId : id order yang akan diambil datanya
     public static function getOrderForOrderInfoPage($orderId)
     {
+        // Variabel $order menyimpan data order dari database
         $order = DB::table('orders')
                     ->where('id', $orderId)
                     ->select('id', 'created_at', 'status', 'paymentId', 'paymentCode', 'expiredTime')
                     ->first();
-        $dt = Carbon::parse($order->created_at);
-        $order->createdDate = $dt->toDateString();
-        $order->createdTime = $dt->toTimeString();
-        $dt = Carbon::parse($order->expiredTime);
-        $order->expiredDate = $dt->toDateString();
-        $order->expiredTime = $dt->toTimeString();
-        $order->totalPrice = BookSnapshot::getTotalOrderPrice($order->id);
-        $order->totalPrice = Order::convertPriceToCurrencyFormat($order->totalPrice);
-        $order->codeName = Payment::getCodeName($order->paymentId);
-        $order->paymentMethod = Payment::getName($order->paymentId);
+        $dt = Carbon::parse($order->created_at); // parsing field created_at menjadi object Carbon
+        $order->createdDate = $dt->toDateString(); // menyimpan tanggal created_at sebagai string
+        $order->createdTime = $dt->toTimeString(); // menyimpan waktu created_at sebagai string
+        $dt = Carbon::parse($order->expiredTime); // parsing field expiredTime menjadi object Carbon
+        $order->expiredDate = $dt->toDateString(); // menyimpan tanggal expiredTime sebagai string
+        $order->expiredTime = $dt->toTimeString(); // menyimpan waktu expiredTime sebagai string
+        $order->totalPrice = BookSnapshot::getTotalOrderPrice($order->id); // mendapatkan total harga order
+        $order->totalPrice = Order::convertPriceToCurrencyFormat($order->totalPrice); // mengonversi totalPrice menjadi string (dalam format rupiah)
+        $order->codeName = Payment::getCodeName($order->paymentId); // mendapatkan nama metode pembayaran
+        $order->paymentMethod = Payment::getName($order->paymentId); // mendapatkan id metode pembayaran
         return $order;
     }
 
+    // mendapatkan id metode pembayaran dari sebuah order
+    // @param $orderId : id order yang akan id metode pembayarannya
     public static function getPaymentId($orderId)
     {
         return DB::table('orders')->where('id', $orderId)->pluck('paymentId')[0];
     }
 
+    // Method ini digunakan untuk membatalkan semua pesanan dari seorang buyer
+    // @param $userId : id user yang akan dibatalkan pesanannya
     public static function cancelAllOrderByUserId($userId)
     {
         DB::table('orders')->where('userId', $userId)->update([
@@ -446,10 +467,14 @@ class Order extends Model
         ]);
     }
 
+    // Method ini digunakan untuk mengembalikan status sebuah transaksi
+    // Data status transaksi diambil dari PG
+    // @param $midtransOrderId : order id yang akan dikembalikan statusnya
     public static function getTransactionStatusFromMidtrans($midtransOrderId)
     {
-        $curl = curl_init();
+        $curl = curl_init(); // inisialisasi cURL
 
+        // menyimpan data cURL
         curl_setopt_array($curl, array(
         CURLOPT_URL => "https://api.sandbox.midtrans.com/v2/$midtransOrderId/status",
         CURLOPT_RETURNTRANSFER => true,
@@ -466,16 +491,20 @@ class Order extends Model
         ),
         ));
 
-        $response = curl_exec($curl);
+        $response = curl_exec($curl); // mengeksekusi dan mengambil hasil cURL
 
-        curl_close($curl);
+        curl_close($curl); // menutup cURL
 
-        return Order::getTransacrtionStatusFromResponseMidtrans($response);
+        return Order::getTransactionStatusFromResponseMidtrans($response); // return status transaksi
     }
 
-    private static function getTransacrtionStatusFromResponseMidtrans($response)
+    // Method ini digunakan untuk mengembalikan status transaksi berdasarkan dari response cURL
+    // @param $response : response dari cURL
+    private static function getTransactionStatusFromResponseMidtrans($response)
     {
-        $start = strpos($response, "transaction_status") + 21;
+        $start = strpos($response, "transaction_status") + 21; // index pertama dari status transaksi
+        
+        // mendapatkan status transaksi
         $temp = "";
         for ($i=$start; $i < strlen($response) - 1; $i++) { 
             $temp = $temp.$response[$i];
@@ -489,10 +518,14 @@ class Order extends Model
         return $temp;
     }
 
+    // Method ini digunakan untuk mengembalikan kode pembayaran dari PG
+    // @param $orderId       : id order
+    // @param $paymentMethod : id metode pembayaran
     public static function getPaymentCodeFromMidtrans($orderId, $paymentMethod)
     {
-        $curl = curl_init();
+        $curl = curl_init(); // inisialisasi cURL
 
+        // data cURL
         curl_setopt_array($curl, array(
         CURLOPT_URL => "https://api.sandbox.midtrans.com/v2/$orderId/status",
         CURLOPT_RETURNTRANSFER => true,
@@ -509,12 +542,15 @@ class Order extends Model
         ),
         ));
 
-        $response = curl_exec($curl);
+        $response = curl_exec($curl); // mengeksekusi dan mendapatkan hasil cURL
 
-        curl_close($curl);
-        return Order::getPaymentCodeFromMidtransResponse($response, $paymentMethod);
+        curl_close($curl); // menutup cURL
+        return Order::getPaymentCodeFromMidtransResponse($response, $paymentMethod); // return kode pembayaran
     }
 
+    // Method ini digunakan untuk mengembalikan kode pembayaran
+    // @param $response      : Respon cURL
+    // @param $paymentMethod : Metode pembayaran yang digunakan
     private static function getPaymentCodeFromMidtransResponse($response, $paymentMethod)
     {
         if ($paymentMethod == 1) {
