@@ -128,7 +128,7 @@ class Order extends Model
         $paymentCode = Order::getPaymentCode($paymentMethod, $orderId); // mendapatkan kode pembaran
         Cart::emptyUserCart(); // mengosongkan keranjang belanja user
         if ($paymentMethod == "1") { // Jika metode pembayarannya mengunakan BNI VA
-            Order::postTransactionToMidtransWithBNIVAPayment($midtransOrderId, $totalPrice); // mengirim data order ke PG
+            PaymentGateway::postTransactionToMidtransWithBNIVAPayment($midtransOrderId, $totalPrice); // mengirim data order ke PG
         }
         else if ($paymentMethod == "2") { // Jika metode pembayarannya menggunakan indomaret
             PaymentGateway::postTransactionToMidtransWithIndomaretPayment($midtransOrderId, $totalPrice); // mengirim data order ke PG
@@ -172,36 +172,6 @@ class Order extends Model
             "created_at" => $createdAt,
             "updated_at" => $createdAt,
         ]);
-    }
-
-    // Method ini digunakan untuk mengirim data order ke PG (Payment Gateway) dengan metode pembarannya menggunakan BNI VA
-    // @param $midtransOrderId : id order yang akan digunakan di PG (string);
-    // @param $totalAmount     : total dana dalam transaksi (integer);
-    public static function postTransactionToMidtransWithBNIVAPayment($midtransOrderId, $totalAmount)
-    {
-        $curl = curl_init(); // inisiasi curl
-
-        curl_setopt_array($curl, array(
-        CURLOPT_URL => "https://api.sandbox.midtrans.com/v2/charge",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => "",
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTFIELDS => "{ \"payment_type\": \"bank_transfer\", \"transaction_details\": {\"gross_amount\": {$totalAmount}, \"order_id\": \"$midtransOrderId\" }, \"customer_details\": { \"email\": \"noreply@example.com\", \"first_name\": \"Vervays\", \"last_name\": \"user\", \"phone\": \"+6281 1234 1234\" }, \"item_details\": [ { \"id\": \"ebook\", \"price\": {$totalAmount}, \"quantity\": 1, \"name\": \"Ebook\" } ], \"bank_transfer\":{ \"bank\": \"bni\", \"va_number\": \"12345678\" } }",
-        CURLOPT_HTTPHEADER => array(
-            "Accept: application/json",
-            "Content-Type: application/json",
-            env("MIDTRANS_AUTHORIZATION")
-        ),
-        )); // mengirim data transaksi
-
-        $response = curl_exec($curl);
-
-        curl_close($curl); // menutup curl
-        // echo $response;
     }
 
     // Method ini digunakan untuk membuat payment code berdasarkan parameter
