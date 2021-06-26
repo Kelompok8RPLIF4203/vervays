@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\DB;
 
 class Cashout
 {
+    // Method ini digunakan untuk insert data ke tabel Cashout
+    // @param $publisherId  : id publisher yang melakukan cashout
+    // @param $bankId       : id bank tujuan
+    // @param $amount       : jumlah withdrawal
+    // @param $accountOwner :
     public static function store($publisherId, $bankId, $amount, $accountOwner)
     {
         $now = Carbon::now();
@@ -21,6 +26,7 @@ class Cashout
         ]);
     }
 
+    // Membuat id baru untuk digunakan pada saat insert data
     private static function getNewId()
     {
         return DB::table('cashouts')->get()->count() + 1;
