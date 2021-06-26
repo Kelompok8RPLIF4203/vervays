@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class Category extends Model
 {
+    // Method ini digunakan untuk mendapatkan nama semua kategori ebook
     public static function getCategories()
     {
         return DB::table('categories')
