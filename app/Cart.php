@@ -7,21 +7,25 @@ use Carbon\Carbon;
 
 class Cart
 {
+    // Method ini digunakan untuk mengosongkan keranjang belenja user
     public static function emptyUserCart()
     {
-        $userId = session('id');
-        DB::table('carts')->where('userId', $userId)->delete();
+        $userId = session('id'); // mengambil id user yang sedang login
+        DB::table('carts')->where('userId', $userId)->delete(); // Menghapus isi keranjang belanja user
     }
 
+    // Method ini digunakan untuk mengambil id-id buku yang ada di keranjang belanja user
     public static function getUserCartBookId()
     {
-        $userId = session('id');
+        $userId = session('id'); // mengambil id user yang sedang login
         return DB::table('carts')
                         ->where('carts.userId', $userId)
                         ->select('carts.bookId')
                         ->get();
     }
 
+    // Method ini digunakan untuk menentukan apakah sebuah buku ada di keranjang belanja user
+    // @param $bookId : id buku yang akan dicek
     public static function whetherTheUserHasAddedBookToCart($bookId)
     {
         $userId = session('id');
@@ -35,6 +39,9 @@ class Cart
         return json_encode(false);
     }
 
+    // Method ini digunakan untuk menentukan apakah sebuah buku ada di keranjang belanja user
+    // Method ini dipanggil oleh method lain yang ada di class ini
+    // @param $bookId : id buku yang akan dicek
     public static function whetherTheUserHasAddedBookToCartForModel($bookId)
     {
         $userId = session('id');
@@ -48,6 +55,8 @@ class Cart
         return false;
     }
 
+    // Method ini digunakan untuk menambahkan sebuah buku ke keranjang belanja
+    // @param $bookId : id buku yang akan ditambahkan ke keranjang belanja
     public static function addBookToCart($bookId)
     {
         if (!Cart::whetherTheUserHasAddedBookToCartForModel($bookId)) {
@@ -61,6 +70,8 @@ class Cart
         }
     }
 
+    // Method ini digunakan untuk menghapus buku dari keranjang belanja
+    // @param $bookId : id buku yang akan ditambahkan ke keranjang belanja
     public static  function removeBookFromCart($bookId)
     {
         if (Cart::whetherTheUserHasAddedBookToCartForModel($bookId)) {
@@ -72,6 +83,7 @@ class Cart
         }
     }
 
+    // Method ini digunakan untuk mendapatkan data keranjang belanja user
     public static function getUserCart()
     {
         $userId = session('id');
@@ -90,11 +102,13 @@ class Cart
         return response()->json($cart);
     }
 
+    // Method ini digunakan untuk mengonversi string ke format mata uang
     private static function convertPriceToCurrencyFormat($price)
     {
         return number_format($price,0,',','.');
     }
 
+    // Method ini digunakan untuk menghapus semua buku dari suatu publisher di semua keranjang belanja user
     public static function removeAllBookByPublisherId($publisherId)
     {
         DB::table('carts')
@@ -104,6 +118,7 @@ class Cart
                 ->delete();
     }
 
+    // Method ini digunakan untuk menghapus sebuah buku di semua keranjang belanja user
     public static  function removeAllBookByBookId($bookId)
     {
         DB::table('carts')
