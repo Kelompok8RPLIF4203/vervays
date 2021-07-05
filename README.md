@@ -6,6 +6,6 @@ Perangkat lunak vervays sudah mulai diimplementasikan sejak 5 Juni 2020. Saat it
 
 Model ada di folder \app
 
-View ada di dolder \resources\views
+View ada di folder \resources\views
 
 Controller ada di folder \app\Http
